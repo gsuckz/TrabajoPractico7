@@ -56,9 +56,16 @@ void relojSnooze(Reloj * reloj, int snooze);
 void relojKill(Reloj * reloj);
 /**
  * @brief Alamacena la hora de (reloj) en formato BCD
- * en la direccion (resultado)
+ * en la direccion (resultado).
+ * Devuelve false si la hora no fue seteada
  * 
  * @param reloj 
  * @param resultado Debe apuntar a un arreglo de 8 bytes
  */
-void relojTime(Reloj *reloj, uint8_t *resultado);
+bool relojTime(Reloj *reloj, uint8_t *resultado);
+/**
+ * @brief Apaga alarma del reloj
+ * 
+ * @param reloj 
+ */
+void relojAlOff(Reloj * reloj);

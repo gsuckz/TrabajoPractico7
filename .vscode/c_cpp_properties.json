@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "G:/Jesus/Proyectos_Facultad/Electronica_IV/Trabajo_Practico1/eiv23-tp1/.pio/libdeps/bluepill_emulado",
+                "G:/Jesus/Proyectos_Facultad/Electronica_IV/Trabajo_Practico1/eiv23-tp1/.pio/libdeps/bluepill_emulado/Unity/src"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:\\msys64\\mingw32\\bin\\gcc.exe",
+            "cStandard": "c99",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "windows-gcc-x86"
+        }
+    ],
+    "version": 4
+}
