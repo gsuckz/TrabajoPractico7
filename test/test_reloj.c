@@ -62,4 +62,3 @@ void test_snooze(){
     TEST_ASSERT_EQUAL(0,alarmacheck());
     relojKill(reloj);
 }
-xd

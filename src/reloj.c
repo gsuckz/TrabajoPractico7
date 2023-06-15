@@ -65,6 +65,7 @@ static bool checkAlarm(Reloj * reloj){
     default:
       break;
   }
+  return reloj->estadoAlarma;
 }
 
 Reloj *relojInit( void (*ctrlAlarma)(bool)){
@@ -98,7 +99,7 @@ void relojAlarmSet(Reloj *reloj, AlarmState mode) {
 
 bool relojTime(Reloj * reloj, uint8_t *resultado) {
   bool hora_config;
-  if (hora_config = (  *(uint8_t*)reloj == 0xF)) 
+  if ((hora_config = (  *(uint8_t*)reloj == 0xF))) 
   for (uint8_t i = 0; i < 6; i++) resultado[i] = reloj->time[i];
   return hora_config;
 }
