@@ -96,9 +96,9 @@ void relojAlarmSet(Reloj *reloj, AlarmState mode) {
   return;
 }
 
-bool relojTime(Reloj *reloj, uint8_t *resultado) {
+bool relojTime(Reloj * reloj, uint8_t *resultado) {
   bool hora_config;
-  if (hora_config = (*(uint8_t*)reloj == 0xF)) 
+  if (hora_config = (  *(uint8_t*)reloj == 0xF)) 
   for (uint8_t i = 0; i < 6; i++) resultado[i] = reloj->time[i];
   return hora_config;
 }
@@ -110,7 +110,7 @@ AlarmState relojAlarm(Reloj *reloj, uint8_t *resultado,uint8_t size) {
 
 void relojSnooze(Reloj * reloj, int snooze){
   if (reloj->estadoAlarma == ON || reloj->estadoAlarma == SNOOZE){  
-    reloj->snooze + snooze;
+    reloj->snooze = reloj->snooze + snooze;
     reloj->estadoAlarma = SNOOZE;}
 }
 
@@ -120,7 +120,7 @@ void relojAlOff(Reloj * reloj){
 void relojTick(Reloj * reloj){
   static double ticks = 0;
   ticks++;
-  if (ticks = TICKS_SEG){
+  if (ticks == TICKS_SEG){
       ticks=0;
       if(10 == ++reloj->time[SEG_U]){
           reloj->time[SEG_U] =0;
@@ -131,7 +131,7 @@ void relojTick(Reloj * reloj){
                   checkAlarm(reloj);
                   if(6 == ++reloj->time[MIN_D]){
                       reloj->time[MIN_D]=0;
-                      if(9==++reloj->time[HOR_U] || 4==reloj->time[HOR_U] && 2==reloj->time[HOR_D]){
+                      if(10==++reloj->time[HOR_U] || (4==reloj->time[HOR_U] && 2==reloj->time[HOR_D])){
                           reloj->time[HOR_U]=0;
                           if(3==++reloj->time[HOR_D]){
                               reloj->time[HOR_D]=0;

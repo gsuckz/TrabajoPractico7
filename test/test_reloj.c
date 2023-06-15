@@ -8,9 +8,12 @@
 #define MINUTOS 20
 #define TICKS TICKS_SEG*60*(HORAS*60+MINUTOS)
 
-bool alarma(bool estado_n,bool change){
     static bool estado = 0;
-    if (change) estado = estado_n;
+void alarma(bool estado_n){
+    estado = estado_n;
+}
+
+bool alarmacheck(void){
     return estado;
 }
 
@@ -28,15 +31,15 @@ void test_reloj_corriendo(){
 
 void test_alarm_set(){
     Reloj * reloj = relojInit(alarma);
-    alarma(0,1);
+    alarma(0);
     relojConfig(reloj,0,0,0);
     for (double i=0; i<=TICKS; i++) relojTick(reloj);
-    TEST_ASSERT_EQUAL(0,alarma(0,0));
+    TEST_ASSERT_EQUAL(0,alarmacheck());
     relojAlarmConfig(reloj,9,25);
     for (double i=0; i<=HORA; i++) relojTick(reloj);
-    TEST_ASSERT_EQUAL(1,alarma(0,0));
+    TEST_ASSERT_EQUAL(1,alarmacheck());
     relojAlOff(reloj);
-    TEST_ASSERT_EQUAL(0,alarma(0,0));
+    TEST_ASSERT_EQUAL(0,alarmacheck());
     relojKill(reloj);
 }   
 
@@ -46,16 +49,16 @@ void test_snooze(){
     alarma(0,1);
     relojConfig(reloj,0,0,0);
     for (double i=0; i<=TICKS; i++) relojTick(reloj);
-    TEST_ASSERT_EQUAL(0,alarma(0,0));
+    TEST_ASSERT_EQUAL(0,alarmacheck());
     relojAlarmConfig(reloj,9,25);
     for (double i=0; i<=HORA; i++) relojTick(reloj);
-    TEST_ASSERT_EQUAL(1,alarma(0,0));
+    TEST_ASSERT_EQUAL(1,alarmacheck());
     relojSnooze(reloj,5);
     for (double i=0; i<=2*MINUTO; i++) relojTick(reloj);
-    TEST_ASSERT_EQUAL(0,alarma(0,0));
+    TEST_ASSERT_EQUAL(0,alarmacheck(0));
     for (double i=0; i<=3*MINUTO; i++) relojTick(reloj);
-    TEST_ASSERT_EQUAL(1,alarma(0,0));
+    TEST_ASSERT_EQUAL(1,alarmacheck());
     relojAlOff(reloj);
-    TEST_ASSERT_EQUAL(0,alarma(0,0));
+    TEST_ASSERT_EQUAL(0,alarmacheck());
     relojKill(reloj);
 }
