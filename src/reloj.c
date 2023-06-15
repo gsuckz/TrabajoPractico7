@@ -32,27 +32,23 @@ typedef struct Reloj {
  * @param size Tamaño del arreglo
  */
 static void toBCD(uint8_t numero, uint8_t *base, uint8_t size) {
-  for (uint8_t i = size - 1; i >= 0; i--) {
+  for (uint8_t i = size - 1; i > 0; i--) {
     //*(base + i) = numero % 10;
     //numero = numero / 10;
   }
 }
 
-static bool checkAlarm(Reloj * reloj){
-  bool estado = 1;
+static void checkAlarm(Reloj * reloj){
 
   switch (reloj->estadoAlarma){
- 
     case READY:
       for (uint8_t i=0; i< 4;i++){
         if(reloj->alarm[i] != reloj->time[i]){
-          estado = 0;
+          reloj->estadoAlarma = ON;
+          reloj->ctrlAlarma(1);          
           break;
         }
       } 
-      reloj->ctrlAlarma(estado);
-      reloj->estadoAlarma = ON;
-      return estado;
     break;
 
     case SNOOZE:      
@@ -65,7 +61,7 @@ static bool checkAlarm(Reloj * reloj){
     default:
       break;
   }
-  return reloj->estadoAlarma;
+  return;
 }
 
 Reloj *relojInit( void (*ctrlAlarma)(bool)){
