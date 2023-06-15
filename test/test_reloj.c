@@ -1,6 +1,7 @@
 #include <unity.h>
 #include <stdbool.h>
 #include "reloj.h"
+#include "stdio.h"
 
 #define MINUTO TICKS_SEG*60
 #define HORA TICKS_SEG*3600
@@ -40,9 +41,15 @@ void test_reloj_corriendo(){
     uint8_t ESPERADO[6] = {1,0,2,0,0,0};
     uint8_t RESULTADO[6];
     Reloj * reloj = relojInit(alarma);
-    relojConfig(reloj,10,20,0);
+    relojConfig(reloj,(uint8_t)10,(uint8_t)20,00);
     for (double i=0; i<=TICKS; i++) relojTick(reloj);
     relojTime(reloj,RESULTADO);
+    TEST_ASSERT_EQUAL(0,RESULTADO[5]);
+    TEST_ASSERT_EQUAL(0,RESULTADO[4]);
+    TEST_ASSERT_EQUAL(0,RESULTADO[3]);
+    TEST_ASSERT_EQUAL(0,RESULTADO[2]);
+    TEST_ASSERT_EQUAL(0,RESULTADO[1]);
+    TEST_ASSERT_EQUAL(0,RESULTADO[0]);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,RESULTADO,6);
     relojKill(reloj);
 }

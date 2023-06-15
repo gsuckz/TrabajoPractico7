@@ -1,0 +1,35 @@
+---
+:source:
+  :file: test/test_reloj.c
+  :dirname: test
+  :basename: test_reloj.c
+:successes:
+- :test: test_reloj_init
+  :line: 22
+  :message: ''
+  :unity_test_time: 0
+:failures:
+- :test: test_reloj_config
+  :line: 33
+  :message: Element 0 Expected 1 Was 0
+  :unity_test_time: 0
+- :test: test_reloj_corriendo
+  :line: 50
+  :message: Expected 0 Was 8
+  :unity_test_time: 0
+- :test: test_alarm_set
+  :line: 66
+  :message: Expected TRUE Was FALSE
+  :unity_test_time: 0
+- :test: test_snooze
+  :line: 81
+  :message: Expected TRUE Was FALSE
+  :unity_test_time: 0
+:ignores: []
+:counts:
+  :total: 5
+  :passed: 1
+  :failed: 4
+  :ignored: 0
+:stdout: []
+:time: 0.5087139001116157
