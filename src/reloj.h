@@ -1,71 +1,51 @@
-#include <stdlib.h>
+#ifndef RELOJ_H
+#define RELOJ_H
 #include <stdint.h>
 #include <stdbool.h>
 
-#define TICKS_SEG 1000
-
 typedef struct Reloj Reloj;
-typedef enum AlarmState { OFF, ON, READY, SNOOZE }AlarmState;
-
 
 /**
- * @brief Reserva memoria para guardar un reloj
+ * @brief Crea un objeto reloj en heap y devuelve un puntero a el
  * 
- * @return Reloj* Puntero al reloj creado
+ * 
+ * @return Reloj* 
  */
-Reloj * relojInit(void (*ctrlAlarma)(bool));
+Reloj * relojCrear(void);
 /**
- * @brief Configura la hora del relok
+ * @brief Libera la memoria reservada para el objeto reloj
  * 
  * @param reloj 
- * @param hora 
- * @param minutos 
- * @param segundos 
- */
-void relojConfig(Reloj * reloj, uint8_t hora, uint8_t minutos, uint8_t segundos);
-/**
- * @brief Configura la alarma del Reloj
- * 
- * @param hora 
- * @param minutos 
- */
-void relojAlarmConfig(Reloj * reloj, uint8_t hora, uint8_t minutos);
-/**
- * @brief Configura el modo de la alarma
- * 
- * @param reloj 
- * @param mode 
- */
-void relojAlarmSet(Reloj * reloj, AlarmState mode);
-/**
- * @brief Incrementa los ticks del reloj al ser llamada
- * 
- */
-void relojTick(Reloj * reloj);
-/**
- * @brief Pospone la alarma (snooze) minutos
- * 
- * @param reloj 
- * @param snooze 
- */
-void relojSnooze(Reloj * reloj, int snooze);
-/**
- * @brief Libera la memoria de (reloj)
- * 
  */
 void relojKill(Reloj * reloj);
 /**
- * @brief Alamacena la hora de (reloj) en formato BCD
- * en la direccion (resultado).
- * Devuelve false si la hora no fue seteada
+ * @brief Guarda la hora en el reloj
  * 
  * @param reloj 
- * @param resultado Debe apuntar a un arreglo de 8 bytes
+ * @param hora Valor de hora en formato BCD sin compactar
+ * {<decena de hora>,<unidad de hora>,<d. de minuto>,<u. de minuto>,<d. de segundo>,<u. de segundo>}
+ * @return true si se ingresó una hora valida
+ * @return false si no se ingresó una hora valida, ademas no tiene efectos secundarios
  */
-bool relojTime(Reloj *reloj, uint8_t *resultado);
+bool relojGuardarHora(Reloj * reloj,const uint8_t hora[6]);
 /**
- * @brief Apaga alarma del reloj
+ * @brief Recupera la hora del reloj. 
+ * 
+ * 
+ * @param reloj
+ * @param hora Luego del llamado contiene la hora actual del reloj en formato BCD sin compactar
+ * {<decena de hora>,<unidad de hora>,<d. de minuto>,<u. de minuto>,<d. de segundo>,<u. de segundo>}
+ * @return true Hora contiene la hora del reloj
+ * @return false No fue asignada una hora correcta
+ */
+bool relojHorario(Reloj * reloj, uint8_t hora[6]);
+/**
+ * @brief Incrementa los segundos al ser llamada el numero
+ * configurado de veces
  * 
  * @param reloj 
  */
-void relojAlOff(Reloj * reloj);
+void relojTick(Reloj * reloj);
+
+#endif
+

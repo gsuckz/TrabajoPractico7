@@ -1,164 +1,214 @@
 #include "src/reloj.h"
 #include "C:/msys64/ucrt64/lib/ruby/gems/3.1.0/gems/ceedling-0.32.0/vendor/unity/src/unity.h"
-static 
-
-      _Bool 
-
-           estado = 0;
-
-void alarma(
-
-           _Bool 
-
-                estado_n){
-
-    estado = estado_n;
-
-}
 
 
 
 
+static Reloj *reloj;
 
 
 
+void setUp(void){
 
+    reloj = 
 
+           ((void *)0)
 
+               ;
 
-
-
-void test_reloj_init(void){
-
-    Reloj * reloj = relojInit(alarma);
+    reloj = relojCrear();
 
 }
 
 
 
-
-
-void test_reloj_config(){
-
-    uint8_t CERO[6] = {0,0,0,0,0,0};
-
-    uint8_t ESPERADO[6] = {1,0,2,0,0,0};
-
-    uint8_t RESULTADO[6];
-
-    Reloj * reloj = relojInit(alarma);
-
-    relojConfig(reloj,10,20,0);
-
-    UnityAssertEqualIntArray(( const void*)((ESPERADO)), ( const void*)((RESULTADO)), (UNITY_UINT32)((6)), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(33), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
-
-    relojConfig(reloj,0,0,0);
-
-    UnityAssertEqualIntArray(( const void*)((CERO)), ( const void*)((RESULTADO)), (UNITY_UINT32)((6)), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(35), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+void tearDown(void){
 
     relojKill(reloj);
 
-}
-
-
-
-void test_reloj_corriendo(){
-
-    uint8_t CERO[6] = {0,0,0,0,0,0};
-
-    uint8_t ESPERADO[6] = {1,0,2,0,0,0};
-
-    uint8_t RESULTADO[6];
-
-    Reloj * reloj = relojInit(alarma);
-
-    relojConfig(reloj,(uint8_t)10,(uint8_t)20,00);
-
-    for (double i=0; i<=1000*60*(10*60+20); i++) relojTick(reloj);
-
-    relojTime(reloj,RESULTADO);
-
-    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((RESULTADO[5])), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(47), UNITY_DISPLAY_STYLE_INT);
-
-    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((RESULTADO[4])), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(48), UNITY_DISPLAY_STYLE_INT);
-
-    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((RESULTADO[3])), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(49), UNITY_DISPLAY_STYLE_INT);
-
-    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((RESULTADO[2])), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(50), UNITY_DISPLAY_STYLE_INT);
-
-    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((RESULTADO[1])), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(51), UNITY_DISPLAY_STYLE_INT);
-
-    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((RESULTADO[0])), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(52), UNITY_DISPLAY_STYLE_INT);
-
-    UnityAssertEqualIntArray(( const void*)((ESPERADO)), ( const void*)((RESULTADO)), (UNITY_UINT32)((6)), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(53), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
-
-    relojKill(reloj);
+    reloj = (Reloj*)0;
 
 }
 
 
 
+void test_un_reloj_sin_poner_en_hora_debe_informar_error_al_pedirle_la_hora(void){
+
+    do { if ((((reloj)) != 
+
+   ((void *)0)
+
+   )) { } else { UnityFail( (((" Expected Non-NULL"))), (UNITY_UINT)((UNITY_UINT)((UNITY_UINT)(19)))); } } while (0);
+
+    uint8_t resultado[6]={0};
+
+    const 
+
+         _Bool 
+
+              horaRecuperada = relojHorario(reloj, resultado);
+
+    do { if (!(horaRecuperada)) { } else { UnityFail( ((("relojHorario debe fallar"))), (UNITY_UINT)((UNITY_UINT)(22))); } } while (0);
+
+}
 
 
-void test_alarm_set(){
 
-    Reloj * reloj = relojInit(alarma);
+void test_reloj_debe_almacenar_la_hora_101220(void){
 
-    alarma(0);
+    const uint8_t ESPERADO[6] = {1,0, 1,2, 2,0};
 
-    relojConfig(reloj,0,0,0);
+    uint8_t resultado[6]={0};
 
-    for (double i=0; i<=1000*60*(10*60+20); i++) relojTick(reloj);
+    const 
 
-    do { if (!(estado)) { } else { UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(63))); } } while (0);
+         _Bool 
 
-    relojAlarmConfig(reloj,9,25);
+              horaGuardada = relojGuardarHora(reloj, ESPERADO);
 
-    for (double i=0; i<=1000*3600; i++) relojTick(reloj);
+    do { if ((horaGuardada)) { } else { UnityFail( ((("relojGuardarHora debe tener exito"))), (UNITY_UINT)((UNITY_UINT)(29))); } } while (0);
 
-    do { if ((estado)) { } else { UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(66))); } } while (0);
+    const 
 
-    relojAlOff(reloj);
+         _Bool 
 
-    do { if (!(estado)) { } else { UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(68))); } } while (0);
+              horaRecuperada = relojHorario(reloj, resultado);
 
-    relojKill(reloj);
+    do { if ((horaRecuperada)) { } else { UnityFail( ((("relojHorario debe tener exito"))), (UNITY_UINT)((UNITY_UINT)(31))); } } while (0);
+
+    UnityAssertEqualIntArray(( const void*)((ESPERADO)), ( const void*)((resultado)), (UNITY_UINT32)((6)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(32), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+
+
+
+}
+
+
+
+void test_reloj_no_debe_alamacenar_hora_invalida_hora(void){
+
+    const uint8_t ESPERADO[6] = {2,4, 1,2, 2,0};
+
+    uint8_t resultado[6]={0};
+
+    const 
+
+         _Bool 
+
+              horaGuardada = relojGuardarHora(reloj, ESPERADO);
+
+    do { if (!(horaGuardada)) { } else { UnityFail( ((("relojGuardarHora debe fallar"))), (UNITY_UINT)((UNITY_UINT)(40))); } } while (0);
+
+    const 
+
+         _Bool 
+
+              horaRecuperada = relojHorario(reloj, resultado);
+
+    do { if (!(horaRecuperada)) { } else { UnityFail( ((("relojHorario debe fallar"))), (UNITY_UINT)((UNITY_UINT)(42))); } } while (0);
+
+}
+
+
+
+void test_reloj_no_debe_alamacenar_hora_invalida_minutos(void){
+
+    const uint8_t ESPERADO[6] = {2,3, 6,2, 2,0};
+
+    uint8_t resultado[6]={0};
+
+    const 
+
+         _Bool 
+
+              horaGuardada = relojGuardarHora(reloj, ESPERADO);
+
+    do { if (!(horaGuardada)) { } else { UnityFail( ((("relojGuardarHora debe fallar"))), (UNITY_UINT)((UNITY_UINT)(49))); } } while (0);
+
+    const 
+
+         _Bool 
+
+              horaRecuperada = relojHorario(reloj, resultado);
+
+    do { if (!(horaRecuperada)) { } else { UnityFail( ((("relojHorario debe fallar"))), (UNITY_UINT)((UNITY_UINT)(51))); } } while (0);
+
+}
+
+
+
+void test_reloj_no_debe_alamacenar_hora_invalida_segundos(void){
+
+    const uint8_t ESPERADO[6] = {2,3, 5,9, 6,0};
+
+    uint8_t resultado[6]={0};
+
+    const 
+
+         _Bool 
+
+              horaGuardada = relojGuardarHora(reloj, ESPERADO);
+
+    do { if (!(horaGuardada)) { } else { UnityFail( ((("relojGuardarHora debe fallar"))), (UNITY_UINT)((UNITY_UINT)(58))); } } while (0);
+
+    const 
+
+         _Bool 
+
+              horaRecuperada = relojHorario(reloj, resultado);
+
+    do { if (!(horaRecuperada)) { } else { UnityFail( ((("relojHorario debe fallar"))), (UNITY_UINT)((UNITY_UINT)(60))); } } while (0);
+
+}
+
+
+
+void test_reloj_debe_incrementar_segundos_09(void){
+
+    const uint8_t HORA_PREVIA[6] = {0,0, 0,0, 0,9};
+
+    const uint8_t HORA_ESPERADA[6] = {0,0, 0,0, 1,0};
+
+    uint8_t resultado[6]={0};
+
+    relojGuardarHora(reloj, HORA_PREVIA);
+
+    relojTick(reloj);
+
+    relojHorario(reloj,resultado);
+
+    UnityAssertEqualIntArray(( const void*)((HORA_ESPERADA)), ( const void*)((resultado)), (UNITY_UINT32)((6)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(70), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+
+}
+
+
+
+void test_reloj_debe_incrementar_segundos_10(void){
+
+    const uint8_t HORA_PREVIA[6] = {0,0, 0,0, 1,0};
+
+    const uint8_t HORA_ESPERADA[6] = {0,0, 0,0, 1,1};
+
+    uint8_t resultado[6]={0};
+
+    relojGuardarHora(reloj, HORA_PREVIA);
+
+    relojTick(reloj);
+
+    relojHorario(reloj,resultado);
+
+    UnityAssertEqualIntArray(( const void*)((HORA_ESPERADA)), ( const void*)((resultado)), (UNITY_UINT32)((6)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(80), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
 
 }
 
@@ -166,38 +216,166 @@ void test_alarm_set(){
 
 
 
-void test_snooze(){
+void test_reloj_debe_incrementar_minutos_00(void){
 
-    Reloj * reloj = relojInit(alarma);
+    const uint8_t HORA_PREVIA[6] = {0,0, 0,0, 5,9};
 
-    alarma(0);
+    const uint8_t HORA_ESPERADA[6] = {0,0, 0,1, 0,0};
 
-    relojConfig(reloj,0,0,0);
+    uint8_t resultado[6]={0};
 
-    for (double i=0; i<=1000*60*(10*60+20); i++) relojTick(reloj);
+    relojGuardarHora(reloj, HORA_PREVIA);
 
-    do { if (!(estado)) { } else { UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(78))); } } while (0);
+    relojTick(reloj);
 
-    relojAlarmConfig(reloj,9,25);
+    relojHorario(reloj,resultado);
 
-    for (double i=0; i<=1000*3600; i++) relojTick(reloj);
+    UnityAssertEqualIntArray(( const void*)((HORA_ESPERADA)), ( const void*)((resultado)), (UNITY_UINT32)((6)), (
 
-    do { if ((estado)) { } else { UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(81))); } } while (0);
+   ((void *)0)
 
-    relojSnooze(reloj,5);
+   ), (UNITY_UINT)(91), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
 
-    for (double i=0; i<=2*1000*60; i++) relojTick(reloj);
+}
 
-    do { if (!(estado)) { } else { UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(84))); } } while (0);
 
-    for (double i=0; i<=3*1000*60; i++) relojTick(reloj);
 
-    do { if ((estado)) { } else { UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(86))); } } while (0);
+void test_reloj_debe_incrementar_minutos_09(void){
 
-    relojAlOff(reloj);
+    const uint8_t HORA_PREVIA[6] = {0,0, 0,9, 5,9};
 
-    do { if (!(estado)) { } else { UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(88))); } } while (0);
+    const uint8_t HORA_ESPERADA[6] = {0,0, 1,0, 0,0};
 
-    relojKill(reloj);
+    uint8_t resultado[6]={0};
+
+    relojGuardarHora(reloj, HORA_PREVIA);
+
+    relojTick(reloj);
+
+    relojHorario(reloj,resultado);
+
+    UnityAssertEqualIntArray(( const void*)((HORA_ESPERADA)), ( const void*)((resultado)), (UNITY_UINT32)((6)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(101), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+
+}
+
+
+
+void test_reloj_debe_incrementar_hora_00(void){
+
+    const uint8_t HORA_PREVIA[6] = {0,0, 5,9, 5,9};
+
+    const uint8_t HORA_ESPERADA[6] = {0,1, 0,0, 0,0};
+
+    uint8_t resultado[6]={0};
+
+    relojGuardarHora(reloj, HORA_PREVIA);
+
+    relojTick(reloj);
+
+    relojHorario(reloj,resultado);
+
+    UnityAssertEqualIntArray(( const void*)((HORA_ESPERADA)), ( const void*)((resultado)), (UNITY_UINT32)((6)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(111), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+
+}
+
+
+
+void test_reloj_debe_incrementar_hora_09(void){
+
+    const uint8_t HORA_PREVIA[6] = {0,9, 5,9, 5,9};
+
+    const uint8_t HORA_ESPERADA[6] = {1,0, 0,0, 0,0};
+
+    uint8_t resultado[6]={0};
+
+    relojGuardarHora(reloj, HORA_PREVIA);
+
+    relojTick(reloj);
+
+    relojHorario(reloj,resultado);
+
+    UnityAssertEqualIntArray(( const void*)((HORA_ESPERADA)), ( const void*)((resultado)), (UNITY_UINT32)((6)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(121), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+
+}
+
+
+
+void test_reloj_debe_incrementar_hora_19(void){
+
+    const uint8_t HORA_PREVIA[6] = {1,9, 5,9, 5,9};
+
+    const uint8_t HORA_ESPERADA[6] = {2,0, 0,0, 0,0};
+
+    uint8_t resultado[6]={0};
+
+    relojGuardarHora(reloj, HORA_PREVIA);
+
+    relojTick(reloj);
+
+    relojHorario(reloj,resultado);
+
+    UnityAssertEqualIntArray(( const void*)((HORA_ESPERADA)), ( const void*)((resultado)), (UNITY_UINT32)((6)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(131), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+
+}
+
+
+
+void test_reloj_debe_incrementar_hora_23(void){
+
+    const uint8_t HORA_PREVIA[6] = {2,3, 5,9, 5,9};
+
+    const uint8_t HORA_ESPERADA[6] = {0,0, 0,0, 0,0};
+
+    uint8_t resultado[6]={15,15,15,15};
+
+    relojGuardarHora(reloj, HORA_PREVIA);
+
+    relojTick(reloj);
+
+    relojHorario(reloj,resultado);
+
+    UnityAssertEqualIntArray(( const void*)((HORA_ESPERADA)), ( const void*)((resultado)), (UNITY_UINT32)((6)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(141), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+
+}
+
+
+
+void test_un_reloj_sin_poner_en_hora_no_debe_correr(void){
+
+    uint8_t anterior[6]={0};
+
+    uint8_t posterior[6]={1,1,1,1};
+
+    relojHorario(reloj, anterior);
+
+    relojTick(reloj);
+
+    relojHorario(reloj, posterior);
+
+    UnityAssertEqualIntArray(( const void*)((anterior)), ( const void*)((posterior)), (UNITY_UINT32)((6)), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(150), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
 
 }

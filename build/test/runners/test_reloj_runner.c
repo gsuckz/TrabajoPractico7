@@ -10,11 +10,20 @@ char* GlobalOrderError;
 /*=======External Functions This Runner Calls=====*/
 extern void setUp(void);
 extern void tearDown(void);
-extern void test_reloj_init(void);
-extern void test_reloj_config();
-extern void test_reloj_corriendo();
-extern void test_alarm_set();
-extern void test_snooze();
+extern void test_un_reloj_sin_poner_en_hora_debe_informar_error_al_pedirle_la_hora(void);
+extern void test_reloj_debe_almacenar_la_hora_101220(void);
+extern void test_reloj_no_debe_alamacenar_hora_invalida_hora(void);
+extern void test_reloj_no_debe_alamacenar_hora_invalida_minutos(void);
+extern void test_reloj_no_debe_alamacenar_hora_invalida_segundos(void);
+extern void test_reloj_debe_incrementar_segundos_09(void);
+extern void test_reloj_debe_incrementar_segundos_10(void);
+extern void test_reloj_debe_incrementar_minutos_00(void);
+extern void test_reloj_debe_incrementar_minutos_09(void);
+extern void test_reloj_debe_incrementar_hora_00(void);
+extern void test_reloj_debe_incrementar_hora_09(void);
+extern void test_reloj_debe_incrementar_hora_19(void);
+extern void test_reloj_debe_incrementar_hora_23(void);
+extern void test_un_reloj_sin_poner_en_hora_no_debe_correr(void);
 
 
 /*=======Mock Management=====*/
@@ -30,12 +39,6 @@ static void CMock_Verify(void)
 static void CMock_Destroy(void)
 {
 }
-
-/*=======Setup (stub)=====*/
-void setUp(void) {}
-
-/*=======Teardown (stub)=====*/
-void tearDown(void) {}
 
 /*=======Test Reset Options=====*/
 void resetTest(void);
@@ -85,11 +88,20 @@ static void run_test(UnityTestFunction func, const char* name, UNITY_LINE_TYPE l
 int main(void)
 {
   UnityBegin("test_reloj.c");
-  run_test(test_reloj_init, "test_reloj_init", 22);
-  run_test(test_reloj_config, "test_reloj_config", 27);
-  run_test(test_reloj_corriendo, "test_reloj_corriendo", 39);
-  run_test(test_alarm_set, "test_alarm_set", 58);
-  run_test(test_snooze, "test_snooze", 73);
+  run_test(test_un_reloj_sin_poner_en_hora_debe_informar_error_al_pedirle_la_hora, "test_un_reloj_sin_poner_en_hora_debe_informar_error_al_pedirle_la_hora", 18);
+  run_test(test_reloj_debe_almacenar_la_hora_101220, "test_reloj_debe_almacenar_la_hora_101220", 25);
+  run_test(test_reloj_no_debe_alamacenar_hora_invalida_hora, "test_reloj_no_debe_alamacenar_hora_invalida_hora", 36);
+  run_test(test_reloj_no_debe_alamacenar_hora_invalida_minutos, "test_reloj_no_debe_alamacenar_hora_invalida_minutos", 45);
+  run_test(test_reloj_no_debe_alamacenar_hora_invalida_segundos, "test_reloj_no_debe_alamacenar_hora_invalida_segundos", 54);
+  run_test(test_reloj_debe_incrementar_segundos_09, "test_reloj_debe_incrementar_segundos_09", 63);
+  run_test(test_reloj_debe_incrementar_segundos_10, "test_reloj_debe_incrementar_segundos_10", 73);
+  run_test(test_reloj_debe_incrementar_minutos_00, "test_reloj_debe_incrementar_minutos_00", 84);
+  run_test(test_reloj_debe_incrementar_minutos_09, "test_reloj_debe_incrementar_minutos_09", 94);
+  run_test(test_reloj_debe_incrementar_hora_00, "test_reloj_debe_incrementar_hora_00", 104);
+  run_test(test_reloj_debe_incrementar_hora_09, "test_reloj_debe_incrementar_hora_09", 114);
+  run_test(test_reloj_debe_incrementar_hora_19, "test_reloj_debe_incrementar_hora_19", 124);
+  run_test(test_reloj_debe_incrementar_hora_23, "test_reloj_debe_incrementar_hora_23", 134);
+  run_test(test_un_reloj_sin_poner_en_hora_no_debe_correr, "test_un_reloj_sin_poner_en_hora_no_debe_correr", 144);
 
   return UnityEnd();
 }

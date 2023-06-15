@@ -1,0 +1,71 @@
+---
+:source:
+  :file: test/test_reloj.c
+  :dirname: test
+  :basename: test_reloj.c
+:successes:
+- :test: test_un_reloj_sin_poner_en_hora_debe_informar_error_al_pedirle_la_hora
+  :line: 18
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_debe_almacenar_la_hora_101220
+  :line: 25
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_no_debe_alamacenar_hora_invalida_hora
+  :line: 36
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_no_debe_alamacenar_hora_invalida_minutos
+  :line: 45
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_no_debe_alamacenar_hora_invalida_segundos
+  :line: 54
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_debe_incrementar_segundos_09
+  :line: 63
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_debe_incrementar_segundos_10
+  :line: 73
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_debe_incrementar_minutos_00
+  :line: 84
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_debe_incrementar_minutos_09
+  :line: 94
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_debe_incrementar_hora_00
+  :line: 104
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_debe_incrementar_hora_09
+  :line: 114
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_debe_incrementar_hora_19
+  :line: 124
+  :message: ''
+  :unity_test_time: 0
+- :test: test_reloj_debe_incrementar_hora_23
+  :line: 134
+  :message: ''
+  :unity_test_time: 0
+- :test: test_un_reloj_sin_poner_en_hora_no_debe_correr
+  :line: 144
+  :message: ''
+  :unity_test_time: 0
+:failures: []
+:ignores: []
+:counts:
+  :total: 14
+  :passed: 14
+  :failed: 0
+  :ignored: 0
+:stdout: []
+:time: 0.04834760003723204

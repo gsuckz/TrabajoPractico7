@@ -1,142 +1,112 @@
-#include "reloj.h"
-#include <stdint.h>
+#include <reloj.h>
+#include <stddef.h>
+#include <stdlib.h>
+struct Reloj{
+    uint8_t hora[6];
+};
 
+enum Digitos {
+    DECENA_HORA,
+    UNIDAD_HORA,
+    DECENA_MINUTO,
+    UNIDAD_MINUTO,
+    DECENA_SEGUNDO,
+    UNIDAD_SEGUNDO
+};
 
-#define POS_MAX 6
-#define POS_MAX_AL 4
-#define SEG_U 5
-#define SEG_D 4
-#define MIN_U 3
-#define MIN_D 2
-#define HOR_U 1
-#define HOR_D 0
-
-
-
-typedef struct Reloj {
-  uint8_t time[POS_MAX];
-  uint8_t alarm[POS_MAX_AL];
-  AlarmState estadoAlarma;
-  void (*ctrlAlarma)(bool);
-  uint32_t  snooze;
-} Reloj;
-
-/**
- * @brief Escribe en un arreglo de (size) bytes en la posicion
- * (base) un numero
- * Se escribe en formato BCD rellenando con 0 el arreglo. Ej:
- * toBCD(23,base,6);
- * →base[6] = [0,0,0,0,2,3]
- * @param numero Numero que se escribe
- * @param base Posicion del primer elemento
- * @param size Tamaño del arreglo
- */
-static void toBCD(uint8_t numero, uint8_t *base, uint8_t size) {
-  for (uint8_t i = size ; i > 0; i--) {
-    base[i-1] = numero % 10;
-    numero = numero / 10;
-  }
-}
-
-static void checkAlarm(Reloj * reloj){
-
-  switch (reloj->estadoAlarma){
-    case READY:
-      for (uint8_t i=0; i< 4;i++){
-        if(reloj->alarm[i] != reloj->time[i]){
-          reloj->estadoAlarma = ON;
-          reloj->ctrlAlarma(1);          
-          break;
-        }
-      } 
-    break;
-
-    case SNOOZE:      
-      if (!--reloj->snooze) {
-        reloj->ctrlAlarma(1);
-        reloj->estadoAlarma = ON;
-        }
-    break;
-    
-    default:
-      break;
-  }
-  return;
-}
-
-Reloj *relojInit( void (*ctrlAlarma)(bool)){
-  Reloj *reloj = malloc(sizeof(Reloj));
-  *(uint8_t*)reloj = 0xF;
-  reloj->ctrlAlarma = ctrlAlarma;
-  return reloj;
+Reloj * relojCrear(void){
+    Reloj * reloj = malloc(sizeof(struct Reloj));
+    reloj->hora[0]= 0xF;
+    return reloj;
 }
 
 void relojKill(Reloj * reloj){
-  free(reloj);
+    free(reloj);
 }
 
-void relojConfig(Reloj *reloj, uint8_t hora, uint8_t minutos, uint8_t segundos) {
-  toBCD(hora, (HOR_D + reloj->time), 2);
-  toBCD(minutos, (MIN_D + reloj->time), 2);
-  toBCD(segundos, (SEG_D + reloj->time), 2);
-  return;
+/**
+ * @brief Determina si la hora en formato BCD sin compactar es válida
+ * (una hora es válida si la hora está entre 0 y 23, minutos y segundos
+ * entre 0 y 59 todos los extremos incluidos)
+ * @param hora 
+ * @return true Hora válida
+ * @return false Hora inválida
+ */
+static bool horaEsValida(const uint8_t hora[6]){
+    const bool horaValida =    hora[DECENA_HORA]<=2 
+                            && hora[UNIDAD_HORA]<=9 
+                            && (hora[DECENA_HORA]<2 || hora[UNIDAD_HORA]<=3);
+
+    const bool minutoValido = hora[DECENA_MINUTO]<6 && hora[UNIDAD_MINUTO]<10;
+
+    const bool segundoValido = hora[DECENA_SEGUNDO]<6 && hora[UNIDAD_SEGUNDO]<10;    
+    
+    return horaValida && minutoValido && segundoValido;
 }
 
-void relojAlarmConfig(Reloj *reloj, uint8_t hora, uint8_t minutos) {
-  toBCD(hora, (HOR_D + reloj->alarm), 2);
-  toBCD(minutos, (MIN_D + reloj->alarm), 2);
-  return;
+bool relojGuardarHora(Reloj * reloj,const uint8_t hora[6]){
+    const bool horaValida = horaEsValida(hora);
+    if(horaValida){
+        for (uint8_t i=0;i<6;i++) reloj->hora[i] = hora[i];
+    }
+    return horaValida;
+}
+bool relojHorario(Reloj * reloj, uint8_t hora[6]){
+    for (uint8_t i=0;i<6;i++) hora[i] = reloj->hora[i];
+    return horaEsValida(hora);
 }
 
-void relojAlarmSet(Reloj *reloj, AlarmState mode) {
-  reloj->estadoAlarma = mode;
-  return;
+static void borraDigitosHasta(Reloj * const reloj,const enum Digitos posicion){
+    for (int i = posicion; i<6; i++) reloj->hora[i] = 0;
+}
+static void incDigito(Reloj * const reloj, const enum Digitos posicion){
+    reloj->hora[posicion]++;
+    borraDigitosHasta(reloj, posicion + 1);
+}
+static void nuevoDia(Reloj * reloj){
+    borraDigitosHasta(reloj, DECENA_HORA);
 }
 
-bool relojTime(Reloj * reloj, uint8_t *resultado) {
-  bool hora_config;
-  if ((hora_config = (  *(uint8_t*)reloj == 0xF))) 
-  for (uint8_t i = 0; i < 6; i++) resultado[i] = reloj->time[i];
-  return hora_config;
-}
-
-AlarmState relojAlarm(Reloj *reloj, uint8_t *resultado,uint8_t size) {
-    for (uint8_t i = 0; i < size; i++) resultado[i] = reloj->alarm[i];
-    return reloj->estadoAlarma;
-}
-
-void relojSnooze(Reloj * reloj, int snooze){
-  if (reloj->estadoAlarma == ON || reloj->estadoAlarma == SNOOZE){  
-    reloj->snooze = reloj->snooze + snooze;
-    reloj->estadoAlarma = SNOOZE;}
-}
-
-void relojAlOff(Reloj * reloj){
-  reloj->ctrlAlarma(0);
+static bool digitoNoRebalsa(Reloj const * const reloj,const enum Digitos posicion){
+    bool noRebalsa = false;
+    const int digito = reloj->hora[posicion];
+    switch (posicion){
+    case UNIDAD_SEGUNDO:
+    case UNIDAD_MINUTO: //FALLTHRU
+        noRebalsa = digito < 9;
+    break;case DECENA_SEGUNDO:
+          case DECENA_MINUTO: //FALLTHRU
+        noRebalsa = digito < 5;
+    break;case UNIDAD_HORA:
+        if (reloj->hora[DECENA_HORA]<2){
+            noRebalsa = digito < 9;
+        }else{
+            noRebalsa = digito < 3;
+        }
+    break;case DECENA_HORA:
+        noRebalsa = digito < 2;
+    break;default:
+        false;
+    break;
+    }
+    return noRebalsa;
 }
 void relojTick(Reloj * reloj){
-  static double ticks = 0;
-  ticks++;
-  if (ticks == TICKS_SEG){
-      ticks=0;
-      if(10 == ++reloj->time[SEG_U]){
-          reloj->time[SEG_U] =0;
-          if (6 == ++reloj->time[SEG_D]){
-              reloj->time[SEG_D] =0;
-              if(10 == ++reloj->time[MIN_U]){
-                  reloj->time[MIN_U]=0;
-                  checkAlarm(reloj);
-                  if(6 == ++reloj->time[MIN_D]){
-                      reloj->time[MIN_D]=0;
-                      if(10==++reloj->time[HOR_U] || (4==reloj->time[HOR_U] && 2==reloj->time[HOR_D])){
-                          reloj->time[HOR_U]=0;
-                          if(3==++reloj->time[HOR_D]){
-                              reloj->time[HOR_D]=0;
-                          }
-                      }
-                  }
-              }  
-          }            
-      }    
-  }  
+    if (reloj->hora[DECENA_HORA] > 9 ) return; //Hora no asignada
+
+    if (digitoNoRebalsa(reloj,UNIDAD_SEGUNDO)){
+        incDigito(reloj,UNIDAD_SEGUNDO);
+    }else if(digitoNoRebalsa(reloj,DECENA_SEGUNDO)){
+        incDigito(reloj,DECENA_SEGUNDO);
+    }else if(digitoNoRebalsa(reloj,UNIDAD_MINUTO)){
+        incDigito(reloj,UNIDAD_MINUTO);
+    } else if (digitoNoRebalsa(reloj,DECENA_MINUTO)){
+        incDigito(reloj,DECENA_MINUTO);
+    }else if(digitoNoRebalsa(reloj,UNIDAD_HORA)){
+        incDigito(reloj,UNIDAD_HORA);
+    } else if(digitoNoRebalsa(reloj,DECENA_HORA)){
+        incDigito(reloj,DECENA_HORA);        
+    } else {
+        nuevoDia(reloj);
+    }
 }
