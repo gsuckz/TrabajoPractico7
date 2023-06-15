@@ -33,8 +33,8 @@ typedef struct Reloj {
  */
 static void toBCD(uint8_t numero, uint8_t *base, uint8_t size) {
   for (uint8_t i = size; i >= 0; i--) {
-    *(base + i) = numero % 10;
-    numero = numero / 10;
+    //*(base + i) = numero % 10;
+    //numero = numero / 10;
   }
 }
 
