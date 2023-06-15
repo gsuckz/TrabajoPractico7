@@ -8,7 +8,7 @@
 #define MINUTOS 20
 #define TICKS TICKS_SEG*60*(HORAS*60+MINUTOS)
 
-    static bool estado = 0;
+static bool estado = 0;
 void alarma(bool estado_n){
     estado = estado_n;
 }
@@ -46,7 +46,7 @@ void test_alarm_set(){
 
 void test_snooze(){
     Reloj * reloj = relojInit(alarma);
-    alarma(0,1);
+    alarma(0);
     relojConfig(reloj,0,0,0);
     for (double i=0; i<=TICKS; i++) relojTick(reloj);
     TEST_ASSERT_EQUAL(0,alarmacheck());
@@ -55,7 +55,7 @@ void test_snooze(){
     TEST_ASSERT_EQUAL(1,alarmacheck());
     relojSnooze(reloj,5);
     for (double i=0; i<=2*MINUTO; i++) relojTick(reloj);
-    TEST_ASSERT_EQUAL(0,alarmacheck(0));
+    TEST_ASSERT_EQUAL(0,alarmacheck());
     for (double i=0; i<=3*MINUTO; i++) relojTick(reloj);
     TEST_ASSERT_EQUAL(1,alarmacheck());
     relojAlOff(reloj);
