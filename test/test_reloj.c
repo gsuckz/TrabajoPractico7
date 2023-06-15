@@ -21,7 +21,7 @@ bool alarmacheck(void){
 
 
 void test_reloj_init(void){
-    Reloj * reloj = relojInit();
+    Reloj * reloj = relojInit(alarma);
 }
 
 
