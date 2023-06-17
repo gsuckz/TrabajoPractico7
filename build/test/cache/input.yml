@@ -1,5 +1,6 @@
 ---
 :project:
+  :use_exceptions: false
   :use_mocks: true
   :compile_threads: 1
   :test_threads: 1
@@ -11,8 +12,6 @@
   :test_file_prefix: test_
   :options_paths: []
   :release_build: false
-  :use_backtrace_gdb_reporter: false
-  :use_exceptions: false
   :use_auxiliary_dependencies: true
   :build_root: build
   :which_ceedling: gem
@@ -83,10 +82,10 @@
   :testfail: ".fail"
   :dependencies: ".d"
 :unity:
-  :vendor_path: C:/msys64/ucrt64/lib/ruby/gems/3.1.0/gems/ceedling-0.32.0/vendor
+  :vendor_path: C:/Ruby27-x64/lib/ruby/gems/2.7.0/gems/ceedling-0.31.1/vendor
   :defines: []
 :cmock:
-  :vendor_path: C:/msys64/ucrt64/lib/ruby/gems/3.1.0/gems/ceedling-0.32.0/vendor
+  :vendor_path: C:/Ruby27-x64/lib/ruby/gems/2.7.0/gems/ceedling-0.31.1/vendor
   :defines: []
   :includes: []
   :mock_prefix: mock_
@@ -105,24 +104,12 @@
   :verbosity: 3
   :unity_helper: false
 :cexception:
-  :vendor_path: C:/msys64/ucrt64/lib/ruby/gems/3.1.0/gems/ceedling-0.32.0/vendor
+  :vendor_path: C:/Ruby27-x64/lib/ruby/gems/2.7.0/gems/ceedling-0.31.1/vendor
   :defines: []
 :test_runner:
   :includes: []
   :file_suffix: _runner
 :tools:
-  :backtrace_settings:
-    :executable: gdb.exe
-    :name: default_backtrace_settings
-    :stderr_redirect: :auto
-    :background_exec: :none
-    :optional: true
-    :arguments:
-    - "-q"
-    - "--eval-command run"
-    - "--eval-command backtrace"
-    - "--batch"
-    - "--args"
   :test_compiler:
     :executable: gcc.exe
     :name: default_test_compiler
@@ -159,7 +146,7 @@
     - ''
     - ''
     - ''
-    - "${1}"
+    - '"${1}"'
     - "${5}"
     - -o "${2}"
     - ''
@@ -241,13 +228,13 @@
   :arguments: []
 :plugins:
   :load_paths:
-  - C:/msys64/ucrt64/lib/ruby/gems/3.1.0/gems/ceedling-0.32.0/lib/../plugins
+  - C:/Ruby27-x64/lib/ruby/gems/2.7.0/gems/ceedling-0.31.1/lib/../plugins
   :enabled:
   - stdout_pretty_tests_report
   - module_generator
   :display_raw_test_results: false
-  :stdout_pretty_tests_report_path: C:/msys64/ucrt64/lib/ruby/gems/3.1.0/gems/ceedling-0.32.0/lib/../plugins/stdout_pretty_tests_report
-  :module_generator_path: C:/msys64/ucrt64/lib/ruby/gems/3.1.0/gems/ceedling-0.32.0/lib/../plugins/module_generator
+  :stdout_pretty_tests_report_path: C:/Ruby27-x64/lib/ruby/gems/2.7.0/gems/ceedling-0.31.1/lib/../plugins/stdout_pretty_tests_report
+  :module_generator_path: C:/Ruby27-x64/lib/ruby/gems/2.7.0/gems/ceedling-0.31.1/lib/../plugins/module_generator
 :gcov:
   :reports:
   - HtmlDetailed

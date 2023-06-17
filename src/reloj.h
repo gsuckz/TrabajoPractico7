@@ -5,13 +5,29 @@
 
 typedef struct Reloj Reloj;
 
+
+// OFF:    Alarma Apagada y Desactivada 
+// READY:  Alarma Apagada y Activada
+// ON:     Alarma Encendida y Activada
+// SNOOZE: Alarma Pospuesta y Activada
+typedef enum EstadoAlarma {
+        OFF,     // Alarma Apagada y Desactivada 
+        READY,   // Alarma Apagada y Activada
+        ON,      // Alarma Encendida y Activada
+        SNOOZE   // Alarma Pospuesta y Activada
+
+}EstadoAlarma;
+//NOTA: La alarma solo se puede Desactivar mientras está ((READY))
+
+
 /**
- * @brief Crea un objeto reloj en heap y devuelve un puntero a el
+ * @brief Crea un objeto Reloj
  * 
- * 
+ * @param ticks Numero de ticks para incrementar el segundero
+ * @param ctrlAlarm Funcion para controlar la alarma
  * @return Reloj* 
  */
-Reloj * relojCrear(void);
+Reloj * relojCrear(int ticks, void (*ctrlAlarm)(bool));
 /**
  * @brief Libera la memoria reservada para el objeto reloj
  * 
@@ -46,6 +62,54 @@ bool relojHorario(Reloj * reloj, uint8_t hora[6]);
  * @param reloj 
  */
 void relojTick(Reloj * reloj);
+/**
+ * @brief Avisa si la alarma esta sonando o no
+ * 
+ * @return true Si esta sonando     (Estado ON)
+ * @return false Si no esta sonando (Estados: OFF,READY,SNOOZE)
+ */
+bool alarmaSonando(Reloj * reloj);
+/**
+ * @brief Get the Estado Alarma object
+ * 
+ * @param reloj 
+ * @param alarma Arreglo donde guardarla hora de la alarma
+ * @return EstadoAlarma 
+ */
+EstadoAlarma getEstadoAlarma(Reloj * reloj);
+/**
+ * @brief Set the Alarma Hora object
+ * 
+ * @param reloj 
+ * @param Alarma Array con la hora de la alarm. Formato: [HH:MM]
+ *@returns true si pudo ajustar la alrama
+ *@return false si no pudo ajustar la alarma
+ */
+bool setAlarmaHora(Reloj * reloj, uint8_t Alarma[4]);
+/**
+ * @brief Set the Alarma Hora object
+ * 
+ * @param reloj 
+ * @param Alarma Array para guardar la hora de la alarm. Formato: [HH:MM]
+ */
+void getAlarmaHora(Reloj * reloj, uint8_t Alarma[4]);
+/**
+ * @brief Set the Alarma Estado object
+ * 
+ * @param reloj 
+ * @param estadoAlarma 
+ * @return true Si pudo fijar el estado deseado
+ * @return false Si no pudo fijar el estado indicado (Sin efecto)
+ */
+bool setAlarmaEstado(Reloj * reloj, EstadoAlarma estadoAlarma);
+/**
+ * @brief Pone la alarma en estado READY : 
+ * Alarma sin sonar y  activada
+ * @param reloj 
+ * 
+ */
+void callarAlarma(Reloj * reloj);
+
 
 #endif
 
