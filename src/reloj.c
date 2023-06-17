@@ -8,16 +8,10 @@ struct Reloj{
     int ticks;
     EstadoAlarma estadoAlarma;
     void (*crtlAlarm)(bool);
+    int snooze;
 };
 
-enum Digitos {
-    DECENA_HORA,
-    UNIDAD_HORA,
-    DECENA_MINUTO,
-    UNIDAD_MINUTO,
-    DECENA_SEGUNDO,
-    UNIDAD_SEGUNDO
-};
+
 
 Reloj * relojCrear(int ticks, void (*ctrlAlarm)(bool)){
     Reloj * reloj = malloc(sizeof(struct Reloj));
@@ -25,6 +19,7 @@ Reloj * relojCrear(int ticks, void (*ctrlAlarm)(bool)){
     reloj->crtlAlarm = ctrlAlarm;
     reloj->ticks = ticks;
     reloj->estadoAlarma = OFF;
+    reloj->snooze = 0;
     for (int i=0;i<4;i++) reloj->alarma[i]=0;
     return reloj;
 }
@@ -101,35 +96,33 @@ static bool digitoNoRebalsa(Reloj const * const reloj,const enum Digitos posicio
     return noRebalsa;
 }
 
-void checkAlarma(Reloj * reloj){
-    
-switch (reloj->estadoAlarma)
-{
-case READY:
+void checkAlarma(Reloj * reloj){    
     bool Iguales = 1;
+    if (reloj->estadoAlarma != READY) return;
     for (int i = 0; i<4; i++) {
         if (reloj->alarma[i]  != reloj->hora[i]){
             Iguales = 0;
         }
     }
     if (Iguales) {
-        reloj->estadoAlarma = ON;
-        reloj->crtlAlarm(1);
+        setAlarmaEstado(reloj,ON);
     }
-break;
-    
-    default:
+}
 
-        break;
-    }
-    
-    
-    
+void checkSnooze(Reloj * reloj){
+    if (reloj->estadoAlarma!= SNOOZE) return;
+
+
+    if (0 == reloj->snooze - 1){
+        setAlarmaEstado(reloj,ON);
+    } else{
+        reloj->snooze--;
+    }   
 }
 
 static void relojTickSegundo(Reloj * reloj){
     if (reloj->hora[DECENA_HORA] > 9 ) return; //Hora no asignada
-
+        checkSnooze(reloj);
     if (digitoNoRebalsa(reloj,UNIDAD_SEGUNDO)){
         incDigito(reloj,UNIDAD_SEGUNDO);
     }else if(digitoNoRebalsa(reloj,DECENA_SEGUNDO)){
@@ -167,12 +160,21 @@ EstadoAlarma getEstadoAlarma(Reloj * reloj){
 }
 
 bool setAlarmaEstado(Reloj * reloj, EstadoAlarma estadoAlarma){
-    if ((reloj->estadoAlarma != READY && estadoAlarma == OFF) || reloj->hora[0] > 9){
-         return 0;
+    if (reloj->hora[0] > 2 ) {
+        return 0;
     }else{
-        reloj->estadoAlarma = estadoAlarma;
-        return 1;
+    reloj->estadoAlarma = estadoAlarma;
+    switch (estadoAlarma){
+        case READY:  //FALLTHRU
+        case OFF:  //FALLTHRU
+        case SNOOZE:  //FALLTHRU
+            reloj->crtlAlarm(0);       
+        break; case ON:
+            reloj->crtlAlarm(1);   
+        break; default:
+        break;          
     }
+    return 1;}
 }
 
 void getAlarmaHora(Reloj * reloj, uint8_t Alarma[4]){
@@ -183,13 +185,16 @@ void getAlarmaHora(Reloj * reloj, uint8_t Alarma[4]){
 bool setAlarmaHora(Reloj * reloj, uint8_t Alarma[4]){
     if (reloj->hora[0] > 9) return 0;
     for (int i=0; i<4; i++)  reloj->alarma[i] =Alarma[i];
-    reloj->estadoAlarma = READY;
+        setAlarmaEstado(reloj,READY);
     return 1;
 }
 
-void callarAlarma(Reloj * reloj){
-    reloj->crtlAlarm(0);
-    reloj->estadoAlarma = READY;
+void relojApagarAlarma(Reloj * reloj){
+    setAlarmaEstado(reloj,READY);
 }
 
 
+void relojSnooze(Reloj * reloj, uint8_t minutos){
+    reloj->snooze += minutos*60;
+    reloj->estadoAlarma = SNOOZE;
+}

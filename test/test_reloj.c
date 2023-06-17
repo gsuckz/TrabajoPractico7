@@ -392,23 +392,15 @@ void ticks2_test_un_reloj_sin_poner_en_hora_no_debe_correr(void){
     relojHorario(reloj, posterior);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(anterior,posterior,6);
 }
-
-
-
-
-
 void test_reloj_debe_informar_estado_de_la_alarma(void){
     TEST_ASSERT_EQUAL(OFF,getEstadoAlarma(reloj));
 }
-
-
 void test_reloj_debe_devolver_la_alarma_0000_si_no_se_ajusto(void){
     uint8_t alarma[4];
     uint8_t CERO[4] = {0,0, 0,0};
     getAlarmaHora(reloj,alarma);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(CERO,alarma,4);
 }
-
 void test_reloj_debe_fijar_alarma(void){
     uint8_t hora [6] = {1,2, 2,2, 5,9}; 
     relojGuardarHora(reloj,hora);
@@ -419,7 +411,6 @@ void test_reloj_debe_fijar_alarma(void){
     TEST_ASSERT_EQUAL_UINT8_ARRAY(alarma,alarmaReloj,4);
 
 }
-
 void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_minuto(void){
     uint8_t alarma[4] = {1,2, 2,3};
     uint8_t hora [6] = {1,2, 2,2, 5,9}; 
@@ -429,7 +420,6 @@ void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_minuto(void){
     relojTick(reloj);
     TEST_ASSERT_TRUE(ALARMA_ESTADO); 
 }
-
 void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_dec_min(void){
     uint8_t alarma[4] = {1,0, 2,0};
     uint8_t hora [6] = {1,0, 1,9, 5,9}; 
@@ -448,7 +438,6 @@ void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_hor(void){
     relojTick(reloj);
     TEST_ASSERT_TRUE(ALARMA_ESTADO); 
 }
-
 void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito(void){
     uint8_t alarma[4] = {2,0, 0,0};
     uint8_t hora [6] = {1,9, 5,9, 5,9}; 
@@ -459,26 +448,17 @@ void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito(void){
     TEST_ASSERT_TRUE(ALARMA_ESTADO); 
     TEST_ASSERT_EQUAL(ON,getEstadoAlarma(reloj));
 }
-
-
 void test_reloj_debe_poder_apagar_la_alarma(void){
     uint8_t alarma[4] = {1,0, 2,0};
-    uint8_t hora [6] = {1,2,  1,9, 5,9};
-    relojHorario(reloj,hora);
-    setAlarmaHora(reloj,alarma);
-    relojTick(reloj);
-    callarAlarma(reloj);
-    TEST_ASSERT_FALSE(ALARMA_ESTADO);
-    TEST_ASSERT_EQUAL(READY,getEstadoAlarma(reloj));
-}
-void test_no_debe_poder_desactivar_la_alarma_encendida(void){
-    uint8_t alarma[4] = {1,0, 2,0};
-    uint8_t hora [6] = {1,0, 1,9, 5,9}; 
+    uint8_t hora [6] = {1,0,  1,9, 5,9};
     relojGuardarHora(reloj,hora);
     setAlarmaHora(reloj,alarma);
     relojTick(reloj);
-    setAlarmaEstado(reloj,OFF);
     TEST_ASSERT_EQUAL(ON,getEstadoAlarma(reloj));
+    relojApagarAlarma(reloj);
+    //setAlarmaEstado(reloj,READY);
+    TEST_ASSERT_FALSE(ALARMA_ESTADO);
+    TEST_ASSERT_EQUAL(READY,getEstadoAlarma(reloj));
 }
 
 void test_debe_poder_desactivar_la_alarma_apagada(void){
@@ -487,7 +467,7 @@ void test_debe_poder_desactivar_la_alarma_apagada(void){
     relojGuardarHora(reloj,hora);
     setAlarmaHora(reloj,alarma);
     relojTick(reloj);
-    callarAlarma(reloj);
+    relojApagarAlarma(reloj);
     setAlarmaEstado(reloj,OFF);
     TEST_ASSERT_EQUAL(OFF,getEstadoAlarma(reloj));
 }
@@ -519,12 +499,30 @@ void test_la_alarma_esta_activada_despues_de_ajustarla(void){
     TEST_ASSERT_EQUAL(READY,getEstadoAlarma(reloj));
 }
 void test_reloj_debe_posponer_alarma(void){
-
+    uint8_t hora [6] = {1,2, 2,2, 5,9};
+    uint8_t alarma[4] = {1,0, 2,0};
+    relojGuardarHora(reloj,hora); 
+    setAlarmaHora(reloj,alarma);
+    relojTick(reloj);
+    relojSnooze(reloj,3);
+    TEST_ASSERT_FALSE(ALARMA_ESTADO);
+    TEST_ASSERT_EQUAL(SNOOZE,getEstadoAlarma(reloj));
+    for (int i = 0; i<(60*3);i++) relojTick(reloj);
+    TEST_ASSERT_TRUE(ALARMA_ESTADO);
+    TEST_ASSERT_EQUAL(ON,getEstadoAlarma(reloj));
 }
-void test_reloj_no_debe_posponer_la_alarma_si_no_se_activo(void){
-
-}
-void test_reloj_debe_volver_a_activar_alarma_en_el_horario_fijado_aunque_haya_sido_pospuesta_el_dia_anterior(void){
+void test_alarma_funciona_al_otro_dia(void){
+    uint8_t hora [6] = {1,2, 2,2, 5,9};
+    uint8_t alarma[4] = {1,2, 2,3};
+    relojGuardarHora(reloj,hora); 
+    setAlarmaHora(reloj,alarma);
+    relojTick(reloj);
+    relojSnooze(reloj,3);
+    for (int i = 0; i<(60*3);i++) relojTick(reloj);
+    relojApagarAlarma(reloj);
+    relojGuardarHora(reloj,hora); 
+    relojTick(reloj);
+    TEST_ASSERT_TRUE(ALARMA_ESTADO);
 
 }
 

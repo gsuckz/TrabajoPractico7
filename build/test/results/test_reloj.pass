@@ -60,75 +60,67 @@
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_debe_informar_estado_de_la_alarma
-  :line: 400
+  :line: 395
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_debe_devolver_la_alarma_0000_si_no_se_ajusto
-  :line: 405
+  :line: 398
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_debe_fijar_alarma
-  :line: 412
+  :line: 404
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_minuto
-  :line: 423
+  :line: 414
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_debe_poder_prender_la_alarma_con_cambio_en_dec_min
-  :line: 433
+  :line: 423
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_hor
-  :line: 442
+  :line: 432
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito
-  :line: 452
+  :line: 441
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_debe_poder_apagar_la_alarma
-  :line: 464
-  :message: ''
-  :unity_test_time: 0
-- :test: test_no_debe_poder_desactivar_la_alarma_encendida
-  :line: 474
+  :line: 451
   :message: ''
   :unity_test_time: 0
 - :test: test_debe_poder_desactivar_la_alarma_apagada
-  :line: 484
+  :line: 464
   :message: ''
   :unity_test_time: 0
 - :test: test_puede_activar_la_alarma_con_hora_ya_fijada
-  :line: 494
+  :line: 474
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_no_debe_poder_activar_la_alarma_sin_la_hora_fijada
-  :line: 505
+  :line: 485
   :message: ''
   :unity_test_time: 0
 - :test: test_la_alarma_esta_activada_despues_de_ajustarla
-  :line: 512
+  :line: 492
   :message: ''
   :unity_test_time: 0
 - :test: test_reloj_debe_posponer_alarma
-  :line: 521
+  :line: 501
   :message: ''
   :unity_test_time: 0
-- :test: test_reloj_no_debe_posponer_la_alarma_si_no_se_activo
-  :line: 524
-  :message: ''
-  :unity_test_time: 0
-- :test: test_reloj_debe_volver_a_activar_alarma_en_el_horario_fijado_aunque_haya_sido_pospuesta_el_dia_anterior
-  :line: 527
+- :test: test_alarma_funciona_al_otro_dia
+  :line: 514
   :message: ''
   :unity_test_time: 0
 :failures: []
 :ignores: []
 :counts:
-  :total: 30
-  :passed: 30
+  :total: 28
+  :passed: 28
   :failed: 0
   :ignored: 0
 :stdout: []
-:time: 2.148888200026704
+:time: 1.6717820000194479

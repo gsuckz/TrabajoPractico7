@@ -942,29 +942,15 @@ void ticks2_test_un_reloj_sin_poner_en_hora_no_debe_correr(void){
 
 }
 
-
-
-
-
-
-
-
-
-
-
 void test_reloj_debe_informar_estado_de_la_alarma(void){
 
     UnityAssertEqualNumber((UNITY_INT)((OFF)), (UNITY_INT)((getEstadoAlarma(reloj))), (
 
    ((void *)0)
 
-   ), (UNITY_UINT)(401), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(396), UNITY_DISPLAY_STYLE_INT);
 
 }
-
-
-
-
 
 void test_reloj_debe_devolver_la_alarma_0000_si_no_se_ajusto(void){
 
@@ -978,11 +964,9 @@ void test_reloj_debe_devolver_la_alarma_0000_si_no_se_ajusto(void){
 
    ((void *)0)
 
-   ), (UNITY_UINT)(409), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+   ), (UNITY_UINT)(402), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
 
 }
-
-
 
 void test_reloj_debe_fijar_alarma(void){
 
@@ -1002,19 +986,35 @@ void test_reloj_debe_fijar_alarma(void){
 
    ((void *)0)
 
-   ), (UNITY_UINT)(419), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
+   ), (UNITY_UINT)(411), UNITY_DISPLAY_STYLE_UINT8, UNITY_ARRAY_TO_ARRAY);
 
 
 
 }
-
-
 
 void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_minuto(void){
 
     uint8_t alarma[4] = {1,2, 2,3};
 
     uint8_t hora [6] = {1,2, 2,2, 5,9};
+
+    relojGuardarHora(reloj,hora);
+
+    setAlarmaHora(reloj,alarma);
+
+    do {if (!(ALARMA_ESTADO)) {} else {UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(419)));}} while(0);
+
+    relojTick(reloj);
+
+    do {if ((ALARMA_ESTADO)) {} else {UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(421)));}} while(0);
+
+}
+
+void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_dec_min(void){
+
+    uint8_t alarma[4] = {1,0, 2,0};
+
+    uint8_t hora [6] = {1,0, 1,9, 5,9};
 
     relojGuardarHora(reloj,hora);
 
@@ -1028,26 +1028,6 @@ void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_minuto(void){
 
 }
 
-
-
-void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_dec_min(void){
-
-    uint8_t alarma[4] = {1,0, 2,0};
-
-    uint8_t hora [6] = {1,0, 1,9, 5,9};
-
-    relojGuardarHora(reloj,hora);
-
-    setAlarmaHora(reloj,alarma);
-
-    do {if (!(ALARMA_ESTADO)) {} else {UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(438)));}} while(0);
-
-    relojTick(reloj);
-
-    do {if ((ALARMA_ESTADO)) {} else {UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(440)));}} while(0);
-
-}
-
 void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_hor(void){
 
     uint8_t alarma[4] = {1,8, 0,0};
@@ -1058,15 +1038,13 @@ void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_hor(void){
 
     setAlarmaHora(reloj,alarma);
 
-    do {if (!(ALARMA_ESTADO)) {} else {UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(447)));}} while(0);
+    do {if (!(ALARMA_ESTADO)) {} else {UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(437)));}} while(0);
 
     relojTick(reloj);
 
-    do {if ((ALARMA_ESTADO)) {} else {UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(449)));}} while(0);
+    do {if ((ALARMA_ESTADO)) {} else {UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(439)));}} while(0);
 
 }
-
-
 
 void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito(void){
 
@@ -1078,49 +1056,21 @@ void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito(void){
 
     setAlarmaHora(reloj,alarma);
 
-    do {if (!(ALARMA_ESTADO)) {} else {UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(457)));}} while(0);
+    do {if (!(ALARMA_ESTADO)) {} else {UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(446)));}} while(0);
 
     relojTick(reloj);
 
-    do {if ((ALARMA_ESTADO)) {} else {UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(459)));}} while(0);
+    do {if ((ALARMA_ESTADO)) {} else {UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(448)));}} while(0);
 
     UnityAssertEqualNumber((UNITY_INT)((ON)), (UNITY_INT)((getEstadoAlarma(reloj))), (
 
    ((void *)0)
 
-   ), (UNITY_UINT)(460), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(449), UNITY_DISPLAY_STYLE_INT);
 
 }
-
-
-
-
 
 void test_reloj_debe_poder_apagar_la_alarma(void){
-
-    uint8_t alarma[4] = {1,0, 2,0};
-
-    uint8_t hora [6] = {1,2, 1,9, 5,9};
-
-    relojHorario(reloj,hora);
-
-    setAlarmaHora(reloj,alarma);
-
-    relojTick(reloj);
-
-    callarAlarma(reloj);
-
-    do {if (!(ALARMA_ESTADO)) {} else {UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(471)));}} while(0);
-
-    UnityAssertEqualNumber((UNITY_INT)((READY)), (UNITY_INT)((getEstadoAlarma(reloj))), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(472), UNITY_DISPLAY_STYLE_INT);
-
-}
-
-void test_no_debe_poder_desactivar_la_alarma_encendida(void){
 
     uint8_t alarma[4] = {1,0, 2,0};
 
@@ -1132,13 +1082,23 @@ void test_no_debe_poder_desactivar_la_alarma_encendida(void){
 
     relojTick(reloj);
 
-    setAlarmaEstado(reloj,OFF);
-
     UnityAssertEqualNumber((UNITY_INT)((ON)), (UNITY_INT)((getEstadoAlarma(reloj))), (
 
    ((void *)0)
 
-   ), (UNITY_UINT)(481), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(457), UNITY_DISPLAY_STYLE_INT);
+
+    relojApagarAlarma(reloj);
+
+
+
+    do {if (!(ALARMA_ESTADO)) {} else {UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(460)));}} while(0);
+
+    UnityAssertEqualNumber((UNITY_INT)((READY)), (UNITY_INT)((getEstadoAlarma(reloj))), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(461), UNITY_DISPLAY_STYLE_INT);
 
 }
 
@@ -1156,7 +1116,7 @@ void test_debe_poder_desactivar_la_alarma_apagada(void){
 
     relojTick(reloj);
 
-    callarAlarma(reloj);
+    relojApagarAlarma(reloj);
 
     setAlarmaEstado(reloj,OFF);
 
@@ -1164,7 +1124,7 @@ void test_debe_poder_desactivar_la_alarma_apagada(void){
 
    ((void *)0)
 
-   ), (UNITY_UINT)(492), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(472), UNITY_DISPLAY_STYLE_INT);
 
 }
 
@@ -1182,7 +1142,7 @@ void test_puede_activar_la_alarma_con_hora_ya_fijada(void){
 
    ((void *)0)
 
-   ), (UNITY_UINT)(499), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(479), UNITY_DISPLAY_STYLE_INT);
 
     setAlarmaEstado(reloj,OFF);
 
@@ -1192,7 +1152,7 @@ void test_puede_activar_la_alarma_con_hora_ya_fijada(void){
 
    ((void *)0)
 
-   ), (UNITY_UINT)(502), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(482), UNITY_DISPLAY_STYLE_INT);
 
 
 
@@ -1208,7 +1168,7 @@ void test_reloj_no_debe_poder_activar_la_alarma_sin_la_hora_fijada(void){
 
    ((void *)0)
 
-   ), (UNITY_UINT)(508), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(488), UNITY_DISPLAY_STYLE_INT);
 
     setAlarmaEstado(reloj,READY);
 
@@ -1216,7 +1176,7 @@ void test_reloj_no_debe_poder_activar_la_alarma_sin_la_hora_fijada(void){
 
    ((void *)0)
 
-   ), (UNITY_UINT)(510), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(490), UNITY_DISPLAY_STYLE_INT);
 
 }
 
@@ -1238,23 +1198,67 @@ void test_la_alarma_esta_activada_despues_de_ajustarla(void){
 
    ((void *)0)
 
-   ), (UNITY_UINT)(519), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(499), UNITY_DISPLAY_STYLE_INT);
 
 }
 
 void test_reloj_debe_posponer_alarma(void){
 
+    uint8_t hora [6] = {1,2, 2,2, 5,9};
 
+    uint8_t alarma[4] = {1,0, 2,0};
+
+    relojGuardarHora(reloj,hora);
+
+    setAlarmaHora(reloj,alarma);
+
+    relojTick(reloj);
+
+    relojSnooze(reloj,3);
+
+    do {if (!(ALARMA_ESTADO)) {} else {UnityFail( ((" Expected FALSE Was TRUE")), (UNITY_UINT)((UNITY_UINT)(508)));}} while(0);
+
+    UnityAssertEqualNumber((UNITY_INT)((SNOOZE)), (UNITY_INT)((getEstadoAlarma(reloj))), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(509), UNITY_DISPLAY_STYLE_INT);
+
+    for (int i = 0; i<(60*3);i++) relojTick(reloj);
+
+    do {if ((ALARMA_ESTADO)) {} else {UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(511)));}} while(0);
+
+    UnityAssertEqualNumber((UNITY_INT)((ON)), (UNITY_INT)((getEstadoAlarma(reloj))), (
+
+   ((void *)0)
+
+   ), (UNITY_UINT)(512), UNITY_DISPLAY_STYLE_INT);
 
 }
 
-void test_reloj_no_debe_posponer_la_alarma_si_no_se_activo(void){
+void test_alarma_funciona_al_otro_dia(void){
 
+    uint8_t hora [6] = {1,2, 2,2, 5,9};
 
+    uint8_t alarma[4] = {1,2, 2,3};
 
-}
+    relojGuardarHora(reloj,hora);
 
-void test_reloj_debe_volver_a_activar_alarma_en_el_horario_fijado_aunque_haya_sido_pospuesta_el_dia_anterior(void){
+    setAlarmaHora(reloj,alarma);
+
+    relojTick(reloj);
+
+    relojSnooze(reloj,3);
+
+    for (int i = 0; i<(60*3);i++) relojTick(reloj);
+
+    relojApagarAlarma(reloj);
+
+    relojGuardarHora(reloj,hora);
+
+    relojTick(reloj);
+
+    do {if ((ALARMA_ESTADO)) {} else {UnityFail( ((" Expected TRUE Was FALSE")), (UNITY_UINT)((UNITY_UINT)(525)));}} while(0);
 
 
 

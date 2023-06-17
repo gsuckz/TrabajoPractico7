@@ -32,14 +32,12 @@ extern void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_dec_min(void);
 extern void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_hor(void);
 extern void test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito(void);
 extern void test_reloj_debe_poder_apagar_la_alarma(void);
-extern void test_no_debe_poder_desactivar_la_alarma_encendida(void);
 extern void test_debe_poder_desactivar_la_alarma_apagada(void);
 extern void test_puede_activar_la_alarma_con_hora_ya_fijada(void);
 extern void test_reloj_no_debe_poder_activar_la_alarma_sin_la_hora_fijada(void);
 extern void test_la_alarma_esta_activada_despues_de_ajustarla(void);
 extern void test_reloj_debe_posponer_alarma(void);
-extern void test_reloj_no_debe_posponer_la_alarma_si_no_se_activo(void);
-extern void test_reloj_debe_volver_a_activar_alarma_en_el_horario_fijado_aunque_haya_sido_pospuesta_el_dia_anterior(void);
+extern void test_alarma_funciona_al_otro_dia(void);
 
 
 /*=======Mock Management=====*/
@@ -118,22 +116,20 @@ int main(void)
   run_test(test_reloj_debe_incrementar_hora_19, "test_reloj_debe_incrementar_hora_19", 190);
   run_test(test_reloj_debe_incrementar_hora_23, "test_reloj_debe_incrementar_hora_23", 205);
   run_test(test_un_reloj_sin_poner_en_hora_no_debe_correr, "test_un_reloj_sin_poner_en_hora_no_debe_correr", 220);
-  run_test(test_reloj_debe_informar_estado_de_la_alarma, "test_reloj_debe_informar_estado_de_la_alarma", 400);
-  run_test(test_reloj_debe_devolver_la_alarma_0000_si_no_se_ajusto, "test_reloj_debe_devolver_la_alarma_0000_si_no_se_ajusto", 405);
-  run_test(test_reloj_debe_fijar_alarma, "test_reloj_debe_fijar_alarma", 412);
-  run_test(test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_minuto, "test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_minuto", 423);
-  run_test(test_reloj_debe_poder_prender_la_alarma_con_cambio_en_dec_min, "test_reloj_debe_poder_prender_la_alarma_con_cambio_en_dec_min", 433);
-  run_test(test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_hor, "test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_hor", 442);
-  run_test(test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito, "test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito", 452);
-  run_test(test_reloj_debe_poder_apagar_la_alarma, "test_reloj_debe_poder_apagar_la_alarma", 464);
-  run_test(test_no_debe_poder_desactivar_la_alarma_encendida, "test_no_debe_poder_desactivar_la_alarma_encendida", 474);
-  run_test(test_debe_poder_desactivar_la_alarma_apagada, "test_debe_poder_desactivar_la_alarma_apagada", 484);
-  run_test(test_puede_activar_la_alarma_con_hora_ya_fijada, "test_puede_activar_la_alarma_con_hora_ya_fijada", 494);
-  run_test(test_reloj_no_debe_poder_activar_la_alarma_sin_la_hora_fijada, "test_reloj_no_debe_poder_activar_la_alarma_sin_la_hora_fijada", 505);
-  run_test(test_la_alarma_esta_activada_despues_de_ajustarla, "test_la_alarma_esta_activada_despues_de_ajustarla", 512);
-  run_test(test_reloj_debe_posponer_alarma, "test_reloj_debe_posponer_alarma", 521);
-  run_test(test_reloj_no_debe_posponer_la_alarma_si_no_se_activo, "test_reloj_no_debe_posponer_la_alarma_si_no_se_activo", 524);
-  run_test(test_reloj_debe_volver_a_activar_alarma_en_el_horario_fijado_aunque_haya_sido_pospuesta_el_dia_anterior, "test_reloj_debe_volver_a_activar_alarma_en_el_horario_fijado_aunque_haya_sido_pospuesta_el_dia_anterior", 527);
+  run_test(test_reloj_debe_informar_estado_de_la_alarma, "test_reloj_debe_informar_estado_de_la_alarma", 395);
+  run_test(test_reloj_debe_devolver_la_alarma_0000_si_no_se_ajusto, "test_reloj_debe_devolver_la_alarma_0000_si_no_se_ajusto", 398);
+  run_test(test_reloj_debe_fijar_alarma, "test_reloj_debe_fijar_alarma", 404);
+  run_test(test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_minuto, "test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_minuto", 414);
+  run_test(test_reloj_debe_poder_prender_la_alarma_con_cambio_en_dec_min, "test_reloj_debe_poder_prender_la_alarma_con_cambio_en_dec_min", 423);
+  run_test(test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_hor, "test_reloj_debe_poder_prender_la_alarma_con_cambio_en_un_hor", 432);
+  run_test(test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito, "test_reloj_debe_poder_prender_la_alarma_con_cambio_en_cada_digito", 441);
+  run_test(test_reloj_debe_poder_apagar_la_alarma, "test_reloj_debe_poder_apagar_la_alarma", 451);
+  run_test(test_debe_poder_desactivar_la_alarma_apagada, "test_debe_poder_desactivar_la_alarma_apagada", 464);
+  run_test(test_puede_activar_la_alarma_con_hora_ya_fijada, "test_puede_activar_la_alarma_con_hora_ya_fijada", 474);
+  run_test(test_reloj_no_debe_poder_activar_la_alarma_sin_la_hora_fijada, "test_reloj_no_debe_poder_activar_la_alarma_sin_la_hora_fijada", 485);
+  run_test(test_la_alarma_esta_activada_despues_de_ajustarla, "test_la_alarma_esta_activada_despues_de_ajustarla", 492);
+  run_test(test_reloj_debe_posponer_alarma, "test_reloj_debe_posponer_alarma", 501);
+  run_test(test_alarma_funciona_al_otro_dia, "test_alarma_funciona_al_otro_dia", 514);
 
   return UnityEnd();
 }

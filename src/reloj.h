@@ -3,6 +3,15 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+enum Digitos {
+    DECENA_HORA,
+    UNIDAD_HORA,
+    DECENA_MINUTO,
+    UNIDAD_MINUTO,
+    DECENA_SEGUNDO,
+    UNIDAD_SEGUNDO
+};
+
 typedef struct Reloj Reloj;
 
 
@@ -17,7 +26,10 @@ typedef enum EstadoAlarma {
         SNOOZE   // Alarma Pospuesta y Activada
 
 }EstadoAlarma;
-//NOTA: La alarma solo se puede Desactivar mientras está ((READY))
+//NOTA: Si el horario de la alarma llega mientras se encuentra otra alarma esta pospuesta, se ignora la nueva alarma
+//      y solo sonará cuando termina el tiempo de Snooze. 
+//NOTA: Modificar la alarma durante el ((Snooze)) la lleva al estado ((READY))
+//NOTA: Modificar la alarma mientras suena, la lleva al estado ((READY))
 
 
 /**
@@ -108,8 +120,14 @@ bool setAlarmaEstado(Reloj * reloj, EstadoAlarma estadoAlarma);
  * @param reloj 
  * 
  */
-void callarAlarma(Reloj * reloj);
-
+void relojApagarAlarma(Reloj * reloj);
+/**
+ * @brief Pospone la alarma el numero de minutos indicado
+ * 
+ * @param reloj 
+ * @param minutos 
+ */
+void relojSnooze(Reloj * reloj, uint8_t minutos);
 
 #endif
 
